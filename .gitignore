@@ -1,0 +1,36 @@
+# Never upload the release key (it signs Relay's updates)
+*.pem
+*.key
+*release-key*
+
+# Installers belong in Releases, not in the code
+*.dmg
+*.exe
+*.zip
+*.part*
+
+# Build output and downloaded packages
+node_modules/
+dist/
+out/
+build/*.app
+
+# Relay's own data (if a copy ever lands here)
+relay-config.json
+relay-keys.json
+relay-data.json
+sync-state.json
+*.log
+
+# Mac, Windows and editor clutter
+.DS_Store
+._*
+Thumbs.db
+desktop.ini
+.vscode/
+.idea/
+*.swp
+
+# Secrets
+.env
+.env.*
