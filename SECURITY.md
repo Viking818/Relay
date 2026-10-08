@@ -1,4 +1,4 @@
-# Relay security review (v0.9.0)
+# Relay security review (v1.0)
 
 Three independent reviews looked at Relay 0.8.1: the app page and its bridge, everything that talks to the network
 (web reading, phone page, Telegram, sync, sign-ins), and everything that touches your files and computer (terminal,
@@ -34,6 +34,32 @@ files, documents, updates). The problems below were fixed in 0.9.0 and are cover
 - Release builds turn off Electron's run-as-Node mode, `NODE_OPTIONS` and debugger flags (fuses), and only load the
   app from its package.
 - Dependencies: the MCP SDK was updated (GHSA-6qxp-vccf-f47h); `npm audit` reports 0 issues in what ships.
+
+## New in 1.0: reviewed and fixed before release
+
+A separate review looked at everything new in 1.0 (learning, Hermes import, Discord and Slack, helpers, other
+machines, Relay Doctor). Fixed before release, with tests:
+- Notes picked up while a bot read command output or attached files now wait for your OK, like notes from web
+  pages and email, so outside text can't quietly teach Relay something.
+- Notes that look like passwords, API keys, tokens or card numbers are refused from every source, Hermes import
+  included.
+- An approval too long to show in full in Telegram, Discord or Slack has no buttons there; you answer it on the
+  computer. A new schedule's whole task is shown before you approve it.
+- Approval buttons only work for the account whose message started the run.
+- The Docker sandbox only gets the project's own folder, never your whole home folder.
+- `./git` or `/tmp/x/ls` no longer counts as the allow-listed `git` or `ls`, and can't be set to always allow.
+- Importing a Hermes model that points to a new server asks first if a saved API key would be sent there.
+
+## New in 1.0 and designed safe
+
+- **Learning**: notes are short, visible and editable on the Learning page; skills Relay writes wait for your OK
+  by default. Only confirmed notes sync.
+- **Discord and Slack**: direct messages only, from accounts you paired with a one-time code (5 wrong tries cancel
+  it); tokens are stored encrypted; Relay asks Discord for direct-message access only.
+- **Other machines**: SSH uses key login only (no passwords stored, no prompts); addresses and user names can't
+  carry ssh options; each machine has its own allow-list. The Docker sandbox has no internet unless you allow it.
+- **Schedules from chat** always ask first, can't be "always allowed", and can't be made by scheduled runs or
+  helpers. Helpers can't start helpers and follow the same approvals.
 
 ## New in 0.9 and designed safe
 
